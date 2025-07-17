@@ -17,9 +17,10 @@
     }
   ],
   "triggers": {
-      // Runs every 10 minutes from 03:00 to 10:00 UTC (08:30 to 15:30 IST)
-      "*/10 3-10 * * *"
-    ]
+      "crons": [
+          // Runs every 10 minutes from 03:00 to 10:00 UTC (08:30 to 15:30 IST)
+          "*/10 3-10 * * *"
+      ]
   },
   /**
    * Smart Placement
