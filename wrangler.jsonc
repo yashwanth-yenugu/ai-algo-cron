@@ -6,7 +6,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "multiple-cron-triggers",
   "main": "src/index.ts",
-  "compatibility_date": "2025-04-03",
+  "compatibility_date": "2025-05-05",
   "observability": {
     "enabled": true
   },
@@ -17,7 +17,7 @@
     }
   ],
   "triggers": {
-    "crons": ["*/1 * * * *"]
+    "crons": ["*/30 * * * *"]
   }
   /**
    * Smart Placement
