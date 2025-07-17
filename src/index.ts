@@ -1,25 +1,46 @@
 interface Env {}
+
+// Global variable to store API response and timing
+let lastApiData: {
+	response: any;
+	responseTimeMs: number;
+	timestamp: string;
+} | null = null;
+
 export default {
 	async scheduled(
 		controller: ScheduledController,
 		env: Env,
 		ctx: ExecutionContext,
 	) {
-		// Write code for updating your API
-		switch (controller.cron) {
-			case "*/3 * * * *":
-				// Every three minutes
-				await updateAPI();
-				break;
-			case "*/10 * * * *":
-				// Every ten minutes
-				await updateAPI2();
-				break;
-			case "*/45 * * * *":
-				// Every forty-five minutes
-				await updateAPI3();
-				break;
+		// Run every 15 minutes
+		if (controller.cron === "*/15 * * * *") {
+			const url = "https://ai-algo-om07.onrender.com/";
+			const start = Date.now();
+			let response, responseBody;
+			try {
+				response = await fetch(url);
+				responseBody = await response.text();
+			} catch (err) {
+				responseBody = `Error: ${err}`;
+			}
+			const end = Date.now();
+			lastApiData = {
+				response: responseBody,
+				responseTimeMs: end - start,
+				timestamp: new Date().toISOString(),
+			};
+			console.log("API called, data stored", lastApiData);
 		}
-		console.log("cron processed");
+	},
+
+	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+		// Endpoint to return last API data
+		if (new URL(request.url).pathname === "/last-api-data") {
+			return new Response(JSON.stringify(lastApiData), {
+				headers: { "Content-Type": "application/json" },
+			});
+		}
+		return new Response("Not found", { status: 404 });
 	},
 };
