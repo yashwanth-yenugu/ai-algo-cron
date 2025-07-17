@@ -4,7 +4,7 @@
  */
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "multiple-cron-triggers",
+  "name": "ai-algo-cron",
   "main": "src/index.ts",
   "compatibility_date": "2025-05-05",
   "observability": {
