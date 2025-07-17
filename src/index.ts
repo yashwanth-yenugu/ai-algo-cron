@@ -27,7 +27,7 @@ export default {
     const apiData: ApiData = {
       response: responseBody,
       responseTimeMs: end - start,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
     };
     await env.API_DATA.put("last-api-data", JSON.stringify(apiData));
     console.log("API called, data stored", apiData);
