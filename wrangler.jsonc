@@ -18,8 +18,8 @@
   ],
   "triggers": {
       "crons": [
-          // Runs every 10 minutes from 03:00 to 10:00 UTC (08:30 to 15:30 IST)
-          "*/10 3-10 * * *"
+          // Runs every 10 minutes from 03:00 to 9:59 UTC (08:30 to 15:29 IST)
+          "*/10 3-9 * * *"
       ]
   },
   /**
