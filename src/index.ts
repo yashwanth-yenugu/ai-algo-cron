@@ -1,11 +1,12 @@
-interface Env {}
+interface Env {
+	API_DATA: KVNamespace;
+}
 
-// Global variable to store API response and timing
-let lastApiData: {
+interface ApiData {
 	response: any;
 	responseTimeMs: number;
 	timestamp: string;
-} | null = null;
+}
 
 export default {
 	async scheduled(
@@ -14,7 +15,7 @@ export default {
 		ctx: ExecutionContext,
 	) {
 		// Run every 15 minutes
-		if (controller.cron === "*/15 * * * *") {
+		if (controller.cron === "*/1 * * * *") {
 			const url = "https://ai-algo-om07.onrender.com/";
 			const start = Date.now();
 			let response, responseBody;
@@ -25,19 +26,26 @@ export default {
 				responseBody = `Error: ${err}`;
 			}
 			const end = Date.now();
-			lastApiData = {
+			const apiData: ApiData = {
 				response: responseBody,
 				responseTimeMs: end - start,
 				timestamp: new Date().toISOString(),
 			};
-			console.log("API called, data stored", lastApiData);
+			await env.API_DATA.put('last-api-data', JSON.stringify(apiData));
+			console.log("API called, data stored", apiData);
 		}
 	},
 
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
 		// Endpoint to return last API data
 		if (new URL(request.url).pathname === "/last-api-data") {
-			return new Response(JSON.stringify(lastApiData), {
+			const data = await env.API_DATA.get('last-api-data');
+			if (!data) {
+				return new Response('No Data', {
+					headers: { "Content-Type": "application/json" },
+				});
+			}
+			return new Response(data, {
 				headers: { "Content-Type": "application/json" },
 			});
 		}
