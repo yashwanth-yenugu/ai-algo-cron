@@ -17,7 +17,14 @@
     }
   ],
   "triggers": {
-    "crons": ["*/15 * * * *"]
+    "crons": [
+      // Runs at 03:00 UTC (08:30 IST)
+      "0 3 * * *",
+      // Runs every 15 minutes from 03:00 to 09:45 UTC (08:30 to 15:15 IST)
+      "*/15 3-9 * * *",
+      // Runs at 10:00, 10:15, and 10:30 UTC (15:30 IST)
+      "0,15,30 10 * * *"
+    ]
   }
   /**
    * Smart Placement
